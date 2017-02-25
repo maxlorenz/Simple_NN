@@ -48,14 +48,14 @@ class NeuralNetwork(object):
 
         for h, w in zip(self.hidden, self.y.weights):
             h.adjust(error * w)
+if __name__ == "__main__":
+	nn = NeuralNetwork(inputs=2, hidden_neurons=4)
+	training = [([0, 0], 0), ([0, 1], 1), ([1, 0], 1), ([1, 1], 0)]
 
-nn = NeuralNetwork(inputs=2, hidden_neurons=4)
-training = [([0, 0], 0), ([0, 1], 1), ([1, 0], 1), ([1, 1], 0)]
+	for epoc in range(100000):
+		input, target = choice(training)
+		nn.learn(input, target)
 
-for epoc in range(100000):
-    input, target = choice(training)
-    nn.learn(input, target)
-
-for input, target in training:
-    print('IN: {}, EXPECTED: {}, RESULT: {:.2f}'
-          .format(input, target, nn.predict(input)))
+	for input, target in training:
+		print('IN: {}, EXPECTED: {}, RESULT: {:.2f}'
+			  .format(input, target, nn.predict(input)))
