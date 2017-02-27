@@ -2,18 +2,21 @@ from random import random, choice
 
 
 class Neuron(object):
+
     def __init__(self, num_inputs):
         self.inputs = []
         self.learning_rate = 0.01
         self.weights = [random() for _ in range(num_inputs)]
         self.bias = random()
 
-    def activation(self, x):
-        "ReLU function"
+    @staticmethod
+    def activation(x):
+        """ReLU function"""
         return (x > 0) * x
 
-    def sensitivity(self, x):
-        "Derivative of ReLU"
+    @staticmethod
+    def sensitivity(x):
+        """Derivative of ReLU"""
         return (x > 0) * 1
 
     def output(self):
@@ -29,9 +32,9 @@ class Neuron(object):
 
 
 class NeuralNetwork(object):
+
     def __init__(self, inputs=2, hidden_neurons=2):
-        self.hidden = [Neuron(inputs)
-                       for _ in range(hidden_neurons)]
+        self.hidden = [Neuron(inputs) for _ in range(hidden_neurons)]
         self.y = Neuron(hidden_neurons)
 
     def predict(self, input):
@@ -48,14 +51,17 @@ class NeuralNetwork(object):
 
         for h, w in zip(self.hidden, self.y.weights):
             h.adjust(error * w)
+
+
 if __name__ == "__main__":
-	nn = NeuralNetwork(inputs=2, hidden_neurons=4)
-	training = [([0, 0], 0), ([0, 1], 1), ([1, 0], 1), ([1, 1], 0)]
 
-	for epoc in range(100000):
-		input, target = choice(training)
-		nn.learn(input, target)
+    nn = NeuralNetwork(inputs=2, hidden_neurons=4)
+    training = [([0, 0], 0), ([0, 1], 1), ([1, 0], 1), ([1, 1], 0)]
 
-	for input, target in training:
-		print('IN: {}, EXPECTED: {}, RESULT: {:.2f}'
-			  .format(input, target, nn.predict(input)))
+    for epoch in range(100000):
+        input, target = choice(training)
+        nn.learn(input, target)
+
+    for input, target in training:
+        print('IN: {}, EXPECTED: {}, RESULT: {:.2f}'
+              .format(input, target, nn.predict(input)))
